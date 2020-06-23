@@ -3,8 +3,8 @@ class Diffoscope < Formula
 
   desc "In-depth comparison of files, archives, and directories"
   homepage "https://diffoscope.org"
-  url "https://files.pythonhosted.org/packages/0f/c8/649dbfd2d16ce5200aec65e1121503e29097f987794f786486fa950b2df3/diffoscope-146.tar.gz"
-  sha256 "a031605c043577c908052763e49b0bd9c1d4d8a169eaf41364900ff1d9566ee2"
+  url "https://files.pythonhosted.org/packages/0c/8e/d77d1845f686c2676fe23796e51962ffcaf45a3b103d7f842c44674c810a/diffoscope-148.tar.gz"
+  sha256 "54e39043226045419ba37f9b7aae4b96939f5ec16f37c44cc102e3d3f8e9ab1b"
 
   depends_on "cmake" => :build
   depends_on "gnu-tar"
