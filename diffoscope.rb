@@ -3,14 +3,14 @@ class Diffoscope < Formula
 
   desc "In-depth comparison of files, archives, and directories"
   homepage "https://diffoscope.org"
-  url "https://files.pythonhosted.org/packages/94/63/f3dccaccc1bb741bd1890e5adc01aa5f529ad74f824b87e521756e6ad426/diffoscope-153.tar.gz"
-  sha256 "b5104b5e72252df45ba6b7cbb0169e2e3407715b6b063fa5b38a2649b0d719a2"
+  url "https://files.pythonhosted.org/packages/47/19/c28e4ddd0ebf5601725939b74b6aa1463523ef65e8e0753c695ced871155/diffoscope-160.tar.gz"
+  sha256 "f164b5e74cc11f6238ad8d62c92d3a819fa4c8b618683fc0533e04f21acae6b2"
 
   depends_on "cmake" => :build
   depends_on "gnu-tar"
   depends_on "libarchive"
   depends_on "libmagic"
-  depends_on "python@3.8"
+  depends_on "python@3.9"
 
   # required for fuzzy matching
   resource "tlsh" do
@@ -50,8 +50,8 @@ class Diffoscope < Formula
     resource("tlsh").stage do
       system "./make.sh"
       cd "py_ext" do
-        system "python3.8", "setup.py", "build"
-        system "python3.8", "setup.py", "install", "--prefix", "#{HOMEBREW_PREFIX}/Cellar/diffoscope/#{version}/libexec"
+        system "python3.9", "setup.py", "build"
+        system "python3.9", "setup.py", "install", "--prefix", "#{HOMEBREW_PREFIX}/Cellar/diffoscope/#{version}/libexec"
       end
     end
 
