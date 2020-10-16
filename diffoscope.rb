@@ -41,7 +41,7 @@ class Diffoscope < Formula
   end
 
   def install
-    venv = virtualenv_create(libexec, Formula["python@3.8"].opt_bin/"python3")
+    venv = virtualenv_create(libexec, Formula["python@3.9"].opt_bin/"python3")
     %w[python-magic progressbar argcomplete libarchive-c].each do |resource|
       venv.pip_install resource
       venv.pip_install buildpath
