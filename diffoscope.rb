@@ -3,25 +3,23 @@ class Diffoscope < Formula
 
   desc "In-depth comparison of files, archives, and directories"
   homepage "https://diffoscope.org"
-  url "https://files.pythonhosted.org/packages/47/19/c28e4ddd0ebf5601725939b74b6aa1463523ef65e8e0753c695ced871155/diffoscope-160.tar.gz"
-  sha256 "f164b5e74cc11f6238ad8d62c92d3a819fa4c8b618683fc0533e04f21acae6b2"
+  url "https://files.pythonhosted.org/packages/91/1a/f15768b9af208111eec34135f26e0993e0e3b33164b2742d684dc29fcc1c/diffoscope-164.tar.gz"
+  sha256 "bc269a39ec72261d9fead55bd951f6cbbe3d2ccce1481f974665999a5b141fff"
+  license "GPL-3.0-or-later"
 
-  depends_on "cmake" => :build
+  livecheck do
+    url :stable
+  end
+
   depends_on "gnu-tar"
   depends_on "libarchive"
   depends_on "libmagic"
-  depends_on "python@3.9"
+  depends_on "python@3.8"
 
-  # required for fuzzy matching
-  resource "tlsh" do
-    url "https://github.com/trendmicro/tlsh/archive/4.2.1.tar.gz"
-    sha256 "ef90e81a5a400a7bc3074f126c133b88f19820a09ead8d457c2aacd4669178ba"
-  end
-
-  # required by cmdline
+  # Use resources from diffoscope[cmdline]
   resource "argcomplete" do
-    url "https://files.pythonhosted.org/packages/43/61/345856864a72ccc004bea5f74183c58bfd6675f9eab931ff9ce21a8fe06b/argcomplete-1.11.1.tar.gz"
-    sha256 "5ae7b601be17bf38a749ec06aa07fb04e7b6b5fc17906948dc1866e7facf3740"
+    url "https://files.pythonhosted.org/packages/cb/53/d2e3d11726367351b00c8f078a96dacb7f57aef2aca0d3b6c437afc56b55/argcomplete-1.12.2.tar.gz"
+    sha256 "de0e1282330940d52ea92a80fea2e4b9e0da1932aaa570f84d268939d1897b04"
   end
 
   resource "libarchive-c" do
@@ -29,7 +27,6 @@ class Diffoscope < Formula
     sha256 "9919344cec203f5db6596a29b5bc26b07ba9662925a05e24980b84709232ef60"
   end
 
-  # required by cmdline
   resource "progressbar" do
     url "https://files.pythonhosted.org/packages/a3/a6/b8e451f6cff1c99b4747a2f7235aa904d2d49e8e1464e0b798272aa84358/progressbar-2.5.tar.gz"
     sha256 "5d81cb529da2e223b53962afd6c8ca0f05c6670e40309a7219eacc36af9b6c63"
@@ -41,23 +38,13 @@ class Diffoscope < Formula
   end
 
   def install
-    venv = virtualenv_create(libexec, Formula["python@3.9"].opt_bin/"python3")
-    %w[python-magic progressbar argcomplete libarchive-c].each do |resource|
-      venv.pip_install resource
-      venv.pip_install buildpath
-    end
-
-    resource("tlsh").stage do
-      system "./make.sh"
-      cd "py_ext" do
-        system "python3.9", "setup.py", "build"
-        system "python3.9", "setup.py", "install", "--prefix", "#{HOMEBREW_PREFIX}/Cellar/diffoscope/#{version}/libexec"
-      end
-    end
+    venv = virtualenv_create(libexec, Formula["python@3.8"].opt_bin/"python3")
+    venv.pip_install resources
+    venv.pip_install buildpath
 
     bin.install libexec/"bin/diffoscope"
-    libarchive = Formula["libarchive"].opt_lib/"libarchive.dylib"
-    bin.env_script_all_files(libexec/"bin", :LIBARCHIVE => libarchive)
+    libarchive = Formula["libarchive"].opt_lib/shared_library("libarchive")
+    bin.env_script_all_files(libexec/"bin", LIBARCHIVE: libarchive)
   end
 
   test do
